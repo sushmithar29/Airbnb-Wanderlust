@@ -10,25 +10,16 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/listings">Explore</a>
+      <div class="navbar-nav me-auto">
+        <a class="nav-link" href="/listings">Home</a>
+        <a class="nav-link" href="/listings">All Listings</a>
+        <% if (locals.currUser) { %>
+          <a class="nav-link" href="/listings/new">Add New Listing</a>
+        <% } %>
       </div>
 
-      <form class="search-form mx-auto" action="/listings" method="GET" role="search">
-        <label class="visually-hidden" for="navbar-search">Search destinations</label>
-        <input
-          id="navbar-search"
-          name="search"
-          type="search"
-          placeholder="Search destinations"
-          autocomplete="off"
-        >
-        <button type="submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Search</button>
-      </form>
-
-      <div class="navbar-nav ms-auto">
-        <a class="nav-link" href="/listings/new">Airbnb your home</a>
-        <% if (!locals.isLoggedIn) { %>
+      <div class="navbar-nav">
+        <% if (!locals.currUser) { %>
           <a class="nav-link active" href="/signup"><b>Sign up</b></a>
           <a class="nav-link" href="/login"><b>Log in</b></a>
         <% } else { %>
