@@ -119,11 +119,12 @@ app.all("/{*splat}", (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    let {statuscode=500, message="Something went wrong!"} = err;
+    let {statuscode = 500, message = "Something went wrong!"} = err;
     res.status(statuscode).render('error.ejs', { statuscode, message, err });
-    //res.status(statuscode).send(message);
 });
 
-app.listen(8080, () => {
-    console.log("Server is running on port 8080");
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server is running on port ${PORT}`);
 });
