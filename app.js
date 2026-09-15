@@ -100,13 +100,17 @@ passport.deserializeUser(User.deserializeUser());
 
 
 app.use((req, res, next) => {
-    res.locals.success = req.flash("success");
+    const successMessages = req.flash("success");
+    res.locals.success = successMessages;
     res.locals.error = req.flash("error");
     // Keep the navigation state available when the session is present but
     // Passport has not restored req.user for this request.
     const sessionUserId = req.session.userId;
     res.locals.currUser = req.user || (sessionUserId ? { _id: sessionUserId } : null);
-    res.locals.isLoggedIn = Boolean(req.user || sessionUserId);
+    const justAuthenticated = successMessages.some((message) =>
+        /^Welcome(?: back)? to Wanderlust!?/i.test(message)
+    );
+    res.locals.isLoggedIn = Boolean(req.user || sessionUserId || justAuthenticated);
     next();
 });
 
