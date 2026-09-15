@@ -15,13 +15,13 @@ function getPopupHtml() {
     <p>Exact Location will be provided after booking</p>`;
 }
 
-function showOpenStreetMap(longitude = 77.209, latitude = 28.6139) {
+function showOpenStreetMap(longitude, latitude) {
   if (typeof L === 'undefined') {
     mapElement.innerHTML = '<p class="map-error">Map service could not be loaded.</p>';
     return;
   }
 
-  const map = L.map('map').setView([latitude, longitude], 4);
+  const map = L.map('map').setView([latitude, longitude], 10);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; OpenStreetMap contributors'
@@ -36,27 +36,33 @@ function showMap() {
   if (!mapElement) return;
 
   const mapToken = mapElement.dataset.mapToken;
-    const coordinates = mapElement.dataset.coordinates
-      ? mapElement.dataset.coordinates.split(',').map(Number)
-      : null;
-    if (!coordinates) {
-      mapElement.innerHTML = '<p class="map-error">Location coordinates could not be found.</p>';
-      return;
-    }
+  const coordinates = mapElement.dataset.coordinates
+    ? mapElement.dataset.coordinates.split(',').map(Number)
+    : [];
+  const [longitude, latitude] = coordinates;
+
+  if (
+    coordinates.length !== 2 ||
+    !Number.isFinite(longitude) ||
+    !Number.isFinite(latitude)
+  ) {
+    mapElement.innerHTML = '<p class="map-error">Location coordinates could not be found.</p>';
+    return;
+  }
+
   if (!mapToken || typeof mapboxgl === 'undefined') {
-    showOpenStreetMap();
+    showOpenStreetMap(longitude, latitude);
     return;
   }
 
   try {
-    const [longitude, latitude] = coordinates;
     mapboxgl.accessToken = mapToken;
 
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v12',
       center: [longitude, latitude],
-      zoom: 4
+      zoom: 10
     });
 
     new mapboxgl.Marker()
@@ -70,7 +76,7 @@ function showMap() {
     });
   } catch (error) {
     console.error(error);
-    showOpenStreetMap();
+    showOpenStreetMap(longitude, latitude);
   }
 }
 
