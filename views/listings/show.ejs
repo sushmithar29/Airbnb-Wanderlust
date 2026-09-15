@@ -45,7 +45,7 @@
 <div  class = "col-8
    offset-3">
    <hr />
-   <% if(currUser) { %>
+   <% if(locals.currUser) { %>
   <h4> Leave a Review</h4>
   <form action="/listings/<%= listing.id %>/reviews" method="POST" novalidate class="needs-validation">
       <!-- The range input has been replaced by the star selector. -->
