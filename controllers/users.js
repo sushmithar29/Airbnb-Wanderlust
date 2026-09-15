@@ -1,5 +1,23 @@
 const User = require("../models/user.js");
 
+const authCookieOptions = {
+    signed: true,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+};
+const authCookieClearOptions = {
+    signed: true,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+};
+
+function rememberAuthenticatedUser(res, userId) {
+    res.cookie("authUserId", userId.toString(), authCookieOptions);
+}
+
 module.exports.renderSignupForm = (req, res) => {
     res.render("users/signup.ejs");
 };
@@ -16,6 +34,7 @@ module.exports.signup = async (req, res, next) => {
             }
 
             req.session.userId = registeredUser._id.toString();
+            rememberAuthenticatedUser(res, registeredUser._id);
             req.flash("success", "Welcome to Wanderlust");
             req.session.save((saveErr) => {
                 if (saveErr) {
@@ -36,6 +55,7 @@ module.exports.renderLoginForm = (req, res) => {
 
 module.exports.login = (req, res, next) => {
     req.session.userId = req.user._id.toString();
+    rememberAuthenticatedUser(res, req.user._id);
     req.flash("success", "Welcome back to Wanderlust!!");
     req.session.save((err) => {
         if (err) {
@@ -52,6 +72,7 @@ module.exports.logout = (req, res, next) => {
         }
 
         delete req.session.userId;
+        res.clearCookie("authUserId", authCookieClearOptions);
         req.flash("success", "You are logged out now!");
         res.redirect("/listings");
     });

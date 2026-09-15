@@ -12,6 +12,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError.js');
 const session = require('express-session');
+const cookieParser = require("cookie-parser");
 const MongoStore = require('connect-mongo').default;
 const flash = require("connect-flash");
 const passport = require('passport');
@@ -19,6 +20,11 @@ const LocalStrategy =   require('passport-local');
 const User = require('./models/user.js');
 
 const isProduction = process.env.NODE_ENV === "production";
+const authCookieClearOptions = {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: isProduction,
+};
 
 
 
@@ -47,6 +53,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+app.use(cookieParser(process.env.SECRET));
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -103,16 +110,19 @@ passport.deserializeUser(User.deserializeUser());
 // restore req.user so protected features (reviews, new listings, and logout)
 // work consistently.
 app.use(async (req, res, next) => {
-    if (req.user || !req.session.userId) {
+    const authenticatedUserId = req.session.userId || req.signedCookies.authUserId;
+    if (req.user || !authenticatedUserId) {
         return next();
     }
 
     try {
-        const sessionUser = await User.findById(req.session.userId);
+        const sessionUser = await User.findById(authenticatedUserId);
         if (sessionUser) {
             req.user = sessionUser;
+            req.session.userId = sessionUser._id.toString();
         } else {
             delete req.session.userId;
+            res.clearCookie("authUserId", authCookieClearOptions);
         }
         next();
     } catch (err) {
