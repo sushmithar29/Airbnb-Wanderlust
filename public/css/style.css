@@ -18,8 +18,12 @@
 
 /*navbar*/
 .navbar{
-    height: 5rem;
+    min-height: 5rem;
     background-color: white;
+}
+
+.navbar .container-fluid {
+    gap: 0.75rem;
 }
 .fa-compass{
     color: #fe424d;
@@ -34,6 +38,7 @@
     align-items: center;
     display: flex;
     gap: 0.5rem;
+    justify-content: center;
 }
 
 .search-form input {
@@ -65,6 +70,17 @@
 
 .search-form button:hover {
     background: #e63b45;
+}
+
+/* Keep the desktop navigation balanced without relying on fixed positioning. */
+@media (min-width: 768px) {
+    .navbar-collapse {
+        align-items: center;
+    }
+
+    .navbar-nav {
+        align-items: center;
+    }
 }
 /*footer*/
 .f-info-links a {
@@ -289,6 +305,43 @@
 }
 
 @media (max-width: 576px){
+    .navbar {
+        min-height: 4.5rem;
+    }
+
+    .navbar-brand {
+        margin-right: 0;
+    }
+
+    .navbar-collapse {
+        border-top: 1px solid #ebebeb;
+        margin-top: 0.5rem;
+        padding: 0.75rem 0 0.25rem;
+    }
+
+    .navbar-nav {
+        gap: 0.15rem;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.45rem 0;
+    }
+
+    .search-form {
+        margin: 0.6rem 0 !important;
+        width: 100%;
+    }
+
+    .search-form input {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .search-form button {
+        flex: 0 0 auto;
+        padding: 0 0.9rem;
+    }
+
     .listings-page {
         padding-top: 1rem;
     }
@@ -307,7 +360,7 @@
     }
 
     .listing-card .card-img-top {
-        height: 65vw;
+        height: clamp(12rem, 65vw, 18rem);
     }
 
     .listing-details-content{
@@ -324,6 +377,23 @@
     gap: 1rem;
     margin: 1.5rem auto 5rem;
     max-width: 35rem;
+}
+
+@media (min-width: 577px) and (max-width: 767px) {
+    .navbar-collapse {
+        border-top: 1px solid #ebebeb;
+        margin-top: 0.5rem;
+        padding-top: 0.75rem;
+    }
+
+    .search-form {
+        margin: 0.6rem 0 !important;
+        width: 100%;
+    }
+
+    .search-form input {
+        width: min(100%, 28rem);
+    }
 }
 
 .btns form{
