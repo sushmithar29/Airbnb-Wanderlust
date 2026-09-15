@@ -56,6 +56,7 @@ module.exports.renderLoginForm = (req, res) => {
 module.exports.login = (req, res, next) => {
     req.session.userId = req.user._id.toString();
     rememberAuthenticatedUser(res, req.user._id);
+    console.info("[auth] Login succeeded; session and signed cookie were issued.");
     req.flash("success", "Welcome back to Wanderlust!!");
     req.session.save((err) => {
         if (err) {
@@ -73,6 +74,7 @@ module.exports.logout = (req, res, next) => {
 
         delete req.session.userId;
         res.clearCookie("authUserId", authCookieClearOptions);
+        console.info("[auth] Logout succeeded; saved identity was cleared.");
         req.flash("success", "You are logged out now!");
         res.redirect("/listings");
     });

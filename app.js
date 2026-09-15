@@ -120,9 +120,11 @@ app.use(async (req, res, next) => {
         if (sessionUser) {
             req.user = sessionUser;
             req.session.userId = sessionUser._id.toString();
+            console.info("[auth] Restored authenticated user from saved identity.");
         } else {
             delete req.session.userId;
             res.clearCookie("authUserId", authCookieClearOptions);
+            console.warn("[auth] Saved identity did not match a user.");
         }
         next();
     } catch (err) {
