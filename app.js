@@ -18,6 +18,8 @@ const passport = require('passport');
 const LocalStrategy =   require('passport-local');
 const User = require('./models/user.js');
 
+const isProduction = process.env.NODE_ENV === "production";
+
 
 
 const listingRouter = require("./routes/listing.js");
@@ -25,6 +27,12 @@ const reviewRouter = require('./routes/review.js');
 const userRouter = require('./routes/user.js');
 
 const dburl = process.env.ATLASDB_URL;
+
+// Render terminates HTTPS at its proxy. Trust it so secure session cookies work
+// correctly in production while local development continues to use HTTP.
+if (isProduction) {
+    app.set("trust proxy", 1);
+}
 
 main().then( () =>{
     console.log("Connected to MongoDB");
@@ -57,11 +65,12 @@ const sessionOptions = {
     store,
     secret: process.env.SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
-        expires: Date.now()+7*24*60*60*1000,
         maxAge: 7*24*60*60*1000,
         httpOnly: true,
+        sameSite: "lax",
+        secure: isProduction,
     },
 };
 
