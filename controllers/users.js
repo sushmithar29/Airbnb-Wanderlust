@@ -1,69 +1,37 @@
-const User = require("../models/user.js");
-
-const authCookieOptions = {
-    signed: true,
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-};
-const authCookieClearOptions = {
-    signed: true,
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-};
-
-function rememberAuthenticatedUser(res, userId) {
-    res.cookie("authUserId", userId.toString(), authCookieOptions);
-}
+const User = require('../models/user.js');
 
 module.exports.renderSignupForm = (req, res) => {
-    res.render("users/signup.ejs");
+    res.render('users/signup.ejs');
 };
 
-module.exports.signup = async (req, res, next) => {
+module.exports.signup = async (req, res) => {
     try {
         const { username, email, password } = req.body;
-        const newUser = new User({ email, username });
+        const newUser = new User({ username, email });
         const registeredUser = await User.register(newUser, password);
 
         req.login(registeredUser, (err) => {
             if (err) {
                 return next(err);
             }
-
-            req.session.userId = registeredUser._id.toString();
-            rememberAuthenticatedUser(res, registeredUser._id);
-            req.flash("success", "Welcome to Wanderlust");
-            req.session.save((saveErr) => {
-                if (saveErr) {
-                    return next(saveErr);
-                }
-                res.redirect("/listings");
-            });
+            req.flash('success', 'Welcome to Wanderlust!');
+            res.redirect('/listings');
         });
-    } catch (err) {
-        req.flash("error", err.message);
-        res.redirect("/signup");
+    } catch (e) {
+        req.flash('error', e.message);
+        res.redirect('/signup');
     }
 };
 
 module.exports.renderLoginForm = (req, res) => {
-    res.render("users/login.ejs");
+    res.render('users/login.ejs');
 };
 
-module.exports.login = (req, res, next) => {
-    req.session.userId = req.user._id.toString();
-    rememberAuthenticatedUser(res, req.user._id);
-    console.info("[auth] Login succeeded; session and signed cookie were issued.");
-    req.flash("success", "Welcome back to Wanderlust!!");
-    req.session.save((err) => {
-        if (err) {
-            return next(err);
-        }
-        res.redirect(res.locals.redirectUrl || "/listings");
-    });
+module.exports.login = async (req, res) => {
+    req.flash('success', 'Welcome back!');
+    const redirectUrl = req.session.returnTo || '/listings';
+    delete req.session.returnTo;
+    res.redirect(redirectUrl);
 };
 
 module.exports.logout = (req, res, next) => {
@@ -71,11 +39,7 @@ module.exports.logout = (req, res, next) => {
         if (err) {
             return next(err);
         }
-
-        delete req.session.userId;
-        res.clearCookie("authUserId", authCookieClearOptions);
-        console.info("[auth] Logout succeeded; saved identity was cleared.");
-        req.flash("success", "You are logged out now!");
-        res.redirect("/listings");
+        req.flash('success', 'You have been logged out!');
+        res.redirect('/listings');
     });
 };

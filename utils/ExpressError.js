@@ -1,8 +1,8 @@
 class ExpressError extends Error {
-    constructor(statuscode, message) {
+    constructor(message, statusCode) {
         super();
-        this.statuscode = statuscode;
         this.message = message;
+        this.statusCode = statusCode;
     }
 }
 module.exports = ExpressError;

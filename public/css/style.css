@@ -1,419 +1,232 @@
- body{
-   font-family: "Plus Jakarta Sans", sans-serif !important;
-   display: flex;
-   flex-direction: column;
-   min-height: 100vh;
+body{
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
-
 .container{
-    flex: 1;
+   flex: 1;
 }
-
-/* Signup form: blue outline only while the pointer is over the field. */
-.signup-input:hover {
-    border-color: #86b7fe;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-}
-
-
-/*navbar*/
-.navbar{
-    min-height: 5rem;
+ .navbar{
+    height: 5rem;
     background-color: white;
-}
-
-.navbar .container-fluid {
-    gap: 0.75rem;
-}
-.fa-compass{
+ }
+ .fa-compass{
     color: #fe424d;
     font-size: 2rem;
-
-}
-.nav-link{
+ }
+ .nav-link{
     color: #222222 !important;
-}
-
-.search-form {
-    align-items: center;
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-}
-
-.search-form input {
-    border: 1px solid #dddddd;
-    border-radius: 999px;
-    font: inherit;
-    height: 2.5rem;
-    outline: none;
-    padding: 0 1.25rem;
-    text-align: center;
-    width: 17rem;
-}
-
-.search-form input:focus {
-    border-color: #fe424d;
-    box-shadow: 0 0 0 0.2rem rgba(254, 66, 77, 0.15);
-}
-
-.search-form button {
-    background: #fe424d;
-    border: 0;
-    border-radius: 999px;
-    color: #fff;
-    font: inherit;
-    font-weight: 600;
-    height: 2.5rem;
-    padding: 0 1.1rem;
-}
-
-.search-form button:hover {
-    background: #e63b45;
-}
-
-/* Keep the desktop navigation balanced without relying on fixed positioning. */
-@media (min-width: 768px) {
-    .navbar-collapse {
-        align-items: center;
-    }
-
-    .navbar-nav {
-        align-items: center;
-    }
-}
-/*footer*/
-.f-info-links a {
-    text-decoration: none;
+ }
+ .signup-page{
+    margin-top: 1.5rem;
+ }
+ .signup-page h1{
+    margin-bottom: 0.75rem;
+ }
+ /* Footer */
+ .f-info-links a{
+    text-decoration: none ;
     color: #222222;
-
-}
-
-.f-info-links a:hover {
+ }
+ .f-info-links:hover{
     text-decoration: underline;
-    color: #222222;
-
-}
-
-.f-info-links, .f-info-socials, .f-info-brand{
+ }
+ .f-info-links, .f-info-socials,.f-info-brand{
     width: 100%;
     display: flex;
     align-items: center;
-     justify-content: center;
-}
-
-.f-info-socials{
+    justify-content:center;
+ }
+ .f-info-socials i{
     font-size: 1.2rem;
     margin-right: 1rem;
-}
-
-
-.f-info {
+ }
+ .f-info{
     text-align: center;
     height: 8rem;
     background-color: #ebebeb;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: space-evenly;
-}
+ }
 
-/*card*/
-.listings-page {
-    padding-top: 1.35rem;
-}
-
-#filters {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-}
-
-.filter {
-    color: #717171;
-    flex: 0 0 auto;
-    margin-right: 2rem;
-    margin-top: 2rem;
-    opacity: 0.7;
-    text-align: center;
-}
-
-.filter i {
-    font-size: 1.05rem;
-}
-
-.filter:hover,
-.filter.active {
-    color: #222222;
-    cursor: pointer;
-    opacity: 1;
-}
-
-.filter p {
-    font-size: 0.75rem;
-    margin: 0;
-}
-
-.tax-toggle {
-    align-items: center;
-    display: flex;
-    font-size: 0.9rem;
-    height: 3.25rem;
-    margin-left: 2rem;
-    padding: 1rem;
-    white-space: nowrap;
-}
-
-.tax-toggle .form-check-input {
-    cursor: pointer;
-    height: 1.25rem;
-    margin: 0 0 0 0.5rem;
-    order: 2;
-    width: 2.25rem;
-}
-
-/* Custom on/off control for the tax display option. */
-.tax-toggle .tax-switch {
-    appearance: none;
-    background-color: #b0b0b0;
-    background-image: radial-gradient(circle, #fff 48%, transparent 52%);
-    background-position: 2px center;
-    background-repeat: no-repeat;
-    background-size: 1.05rem 1.05rem;
-    border: 0;
-    border-radius: 999px;
-    box-shadow: none;
-    transition: background-color 0.2s ease, background-position 0.2s ease;
-}
-
-.tax-toggle .tax-switch:checked {
-    background-color: #0d6efd;
-    background-image: radial-gradient(circle, #fff 48%, transparent 52%);
-    background-position: calc(100% - 2px) center;
-    box-shadow: none;
-}
-
-.tax-toggle .tax-switch:focus {
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-}
-
-.listings-grid {
-    --bs-gutter-x: 1rem;
-    --bs-gutter-y: 1.8rem;
-}
-
-.listing-card{
+ /* Cards */
+ .listing-card{
    border: none !important;
+   border-radius: 1rem !important;
+   overflow: hidden;
+   position: relative;
+   margin-bottom: 2rem;
+   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+ }
+ .listing-img{
+   height: 22rem;
+   object-fit: cover;
+ }
+ .card-img-top{
+   border-radius: 1rem !important;
+   width: 100% !important;
+   object-fit: cover !important;
+ }
+ .card-body{
+   padding: 0.9rem 0 0 !important;
+ }
+ .card-text p{
+   font-weight: 400 !important;
+ }
+ .card-text {
+   color: #1f1f1f;
    margin: 0;
-}
-
-.listing-card .card-img-top{
-    border-radius: 1rem !important;
-    width: 100% !important;
-    aspect-ratio: 10 / 7;
-    height: clamp(12rem, 20vw, 18.3rem);
-    object-fit: cover !important;
-}
-
-.card-body{
-    padding: 0rem !important;
-}
-
-.listing-card .card-text{
-    font-weight: 400;
-    font-size: 0.8rem;
-    line-height: 1.35;
-    margin-top: 0.35rem;
-
-}
-
-.tax-info {
-    display: none;
-    font-size: 0.8rem;
-    font-style: italic;
-}
-
-.tax-info.is-visible {
-    display: inline;
-}
-
-.listing-link{
-    text-decoration: none;
-    color: #222222;
-}
-
-/* Listing details page */
-.show-listing {
-    margin-bottom: 2rem;
-}
-
-/* Card Effect */
-.card-img-overlay{
-    opacity: 0;
-}
-
-
-.card-img-overlay:hover{
-    opacity: 0.2;
-    background-color:white;
-}
-
-/* New Page */
-
-.add-btn{
-    background-color: #fe424d !important;
-    border: none !important;
-    color: #fff !important;
-    padding: 0.375rem 0.75rem;
-    width: auto;;
-}
-
-/*Edit Page*/
-.edit-btn{
-    background-color: #fe424d !important;
-    border:none !important;
-}
-
-
-/*Show Page*/
-.listing-details{
-    max-width: 35rem;
-    margin: 1rem auto 0;
-}
-
-.listing-details-content{
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-}
-
-.show-card .show-img{
-    /* Override the taller listing-card image rule on the details page. */
-    height: 30vh !important;
-    object-fit: cover !important;
-}
-
-.listing-actions{
-    display: flex;
-    gap: 2rem;
-    padding-top: 0.25rem;
-}
-
-.listing-actions form{
-    margin: 0;
-}
-
-@media (max-width: 576px){
-    .navbar {
-        min-height: 4.5rem;
-    }
-
-    .navbar-brand {
-        margin-right: 0;
-    }
-
-    .navbar-collapse {
-        border-top: 1px solid #ebebeb;
-        margin-top: 0.5rem;
-        padding: 0.75rem 0 0.25rem;
-    }
-
-    .navbar-nav {
-        gap: 0.15rem;
-    }
-
-    .navbar-nav .nav-link {
-        padding: 0.45rem 0;
-    }
-
-    .search-form {
-        margin: 0.6rem 0 !important;
-        width: 100%;
-    }
-
-    .search-form input {
-        min-width: 0;
-        width: 100%;
-    }
-
-    .search-form button {
-        flex: 0 0 auto;
-        padding: 0 0.9rem;
-    }
-
-    .listings-page {
-        padding-top: 1rem;
-    }
-
-    #filters {
-        margin-left: -0.75rem;
-        margin-right: -0.75rem;
-        padding-left: 0.75rem;
-        padding-right: 0.75rem;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-    }
-
-    .tax-toggle {
-        display: none;
-    }
-
-    .listing-card .card-img-top {
-        height: clamp(12rem, 65vw, 18rem);
-    }
-
-    .listing-details-content{
-        flex-direction: column;
-    }
-
-    .listing-actions{
-        padding-top: 0;
-    }
-}
-
-.btns{
-    display: flex;
-    gap: 1rem;
-    margin: 1.5rem auto 5rem;
-    max-width: 35rem;
-}
-
-@media (min-width: 577px) and (max-width: 767px) {
-    .navbar-collapse {
-        border-top: 1px solid #ebebeb;
-        margin-top: 0.5rem;
-        padding-top: 0.75rem;
-    }
-
-    .search-form {
-        margin: 0.6rem 0 !important;
-        width: 100%;
-    }
-
-    .search-form input {
-        width: min(100%, 28rem);
-    }
-}
-
-.btns form{
-    margin: 0;
-}
-
-#map {
-    height: 400px;
-    width: 100%;
-    border-radius: 1rem;
-}
-
-.show-card{
-    padding-left: 0;
-    padding-right: 0;
-}
-
-/* map */
-#map{
-height: 400px;
-width: 80vh;
-}
-
+   font-size: 1.05rem;
+ }
+ .listing-links{
+   text-decoration: none;
+   color: inherit;
+ }
+ /* Card-Effects */
+ .card-img-overlay:hover{
+   opacity: 0.2;
+   background-color: white;
+ }
+ /* New-page */
+ .ad-btn{
+   background-color: #fe424d !important;
+   border: none !important;
+ }
+   /* Edit Page */
+   .edit-btn{
+   background-color: #fe424d !important;
+   border: none !important;
+   }
+   /* Show-page */
+   .show-title {
+      font-size: clamp(1.55rem, 2.2vw, 2rem);
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      line-height: 1.2;
+   }
+   .show-img{
+      height: clamp(15rem, 28vw, 20rem);
+      object-fit: cover;
+   }
+   .show-card {
+      border: none !important;
+      border-radius: 1.5rem !important;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      margin-bottom: 1.2rem;
+      margin-inline: 0;
+      max-width: 42rem;
+      padding-left: 0;
+      padding-right: 0;
+   }
+   .owned-by {
+      margin-top: 0.4rem;
+      margin-bottom: 0.65rem;
+      font-size: 0.9rem;
+      color: #4a4a4a;
+   }
+   .description-text {
+      max-width: 70ch;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      margin-bottom: 0.65rem;
+   }
+   .price-text {
+      font-size: 0.9rem;
+      margin-bottom: 0.65rem;
+   }
+   .btns{
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-top: 1rem;
+   }
+   .delete-form {
+      margin: 0;
+   }
+   .edit-btn {
+      min-width: 120px;
+      background-color: #fe424d !important;
+      border: none !important;
+   }
+   .review-form .btn-outline-dark {
+      border: 1px solid #4a4a4a;
+      background: transparent;
+      color: #1f1f1f;
+      border-radius: 0.3rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+   }
+   .review-form {
+      margin-top: 0.5rem;
+   }
+   .review-form .form-label {
+      margin-bottom: 0.45rem;
+   }
+   .review-form textarea {
+      min-height: 9rem;
+      resize: vertical;
+   }
+   .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+   }
+   .review-card {
+      background: #fff;
+      border: 1px solid #d9d9d9;
+      border-radius: 0.8rem;
+      padding: 1rem 1.2rem;
+      min-height: 172px;
+      display: flex;
+      flex-direction: column;
+   }
+   .review-user {
+      margin: 0 0 0.8rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1d1d1d;
+   }
+   .review-text {
+      margin: 0 0 1rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #1d1d1d;
+   }
+   .review-stars {
+      margin-top: auto;
+      margin-bottom: 0.9rem;
+      font-size: 1.05rem;
+      color: #1d1d1d;
+   }
+   .review-card .starability-result {
+      margin-top: auto;
+      margin-bottom: 0.9rem;
+   }
+   #map {
+      width: 100%;
+      height: clamp(15rem, 28vw, 20rem);
+      border-radius: 1rem;
+      margin-top: 1rem;
+      margin-inline: 0;
+      max-width: 42rem;
+      overflow: hidden;
+   }
+      .map-error {
+         padding: 1.25rem;
+         margin: 0;
+         color: #842029;
+         background: #f8d7da;
+      }
+   .review-delete-btn {
+      align-self: flex-start;
+      background: #2a2a2a;
+      border: none;
+      border-radius: 0.4rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.95rem;
+   }

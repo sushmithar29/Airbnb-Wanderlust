@@ -16,12 +16,3 @@
     }, false)
   })
 })()
-
-const taxSwitch = document.querySelector('#switchCheckDefault');
-if (taxSwitch) {
-  taxSwitch.addEventListener('change', () => {
-    document.querySelectorAll('.tax-info').forEach((taxInfo) => {
-      taxInfo.classList.toggle('is-visible', taxSwitch.checked);
-    });
-  });
-}
