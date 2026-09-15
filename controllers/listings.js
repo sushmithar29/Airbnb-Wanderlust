@@ -1,6 +1,7 @@
 const Listing = require("../models/listing");
 
 const NOMINATIM_SEARCH_URL = "https://nominatim.openstreetmap.org/search";
+const PHOTON_SEARCH_URL = "https://photon.komoot.io/api/";
 let lastGeocodeRequestAt = 0;
 
 async function respectGeocodeRateLimit() {
@@ -21,21 +22,43 @@ async function getGeometry(location, country) {
     try {
         await respectGeocodeRateLimit();
         const response = await fetch(url, {
-            headers: { "User-Agent": "Wanderlust learning project" },
+            headers: {
+                "User-Agent": "Wanderlust/1.0 (https://github.com/sushmithar29/Airbnb-Wanderlust)",
+                "Accept-Language": "en",
+            },
         });
+        if (response.ok) {
+            const [place] = await response.json();
+            const longitude = Number(place?.lon);
+            const latitude = Number(place?.lat);
+
+            if (Number.isFinite(longitude) && Number.isFinite(latitude)) {
+                return { type: "Point", coordinates: [longitude, latitude] };
+            }
+        }
+    } catch (err) {
+        console.error("Primary geocoder unavailable:", err.message);
+    }
+
+    // Use a backup geocoder so listings still receive a map if Nominatim is
+    // rate-limited or temporarily unavailable.
+    try {
+        const fallbackUrl = new URL(PHOTON_SEARCH_URL);
+        fallbackUrl.search = new URLSearchParams({ q: query, limit: "1" });
+        const response = await fetch(fallbackUrl);
         if (!response.ok) return null;
 
-        const [place] = await response.json();
-        const longitude = Number(place?.lon);
-        const latitude = Number(place?.lat);
+        const [longitude, latitude] = (await response.json())
+            .features?.[0]?.geometry?.coordinates || [];
 
-        if (!Number.isFinite(longitude) || !Number.isFinite(latitude)) return null;
-
-        return { type: "Point", coordinates: [longitude, latitude] };
+        if (Number.isFinite(longitude) && Number.isFinite(latitude)) {
+            return { type: "Point", coordinates: [longitude, latitude] };
+        }
     } catch (err) {
-        console.error("Unable to geocode listing location:", err.message);
-        return null;
+        console.error("Backup geocoder unavailable:", err.message);
     }
+
+    return null;
 }
 
 module.exports.index = async (req, res) => {
@@ -84,7 +107,7 @@ module.exports.createListing = async (req, res) => {
 
     await newListing.save();
     req.flash("success", "New Listing Created!");
-    res.redirect("/listings");
+    res.redirect(`/listings/${newListing._id}`);
 };
 
 module.exports.renderEditForm = async (req, res) => {
