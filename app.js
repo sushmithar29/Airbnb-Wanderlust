@@ -98,6 +98,28 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// A Render session can retain its user ID even when Passport does not restore
+// req.user on the following request. Validate that ID against MongoDB and
+// restore req.user so protected features (reviews, new listings, and logout)
+// work consistently.
+app.use(async (req, res, next) => {
+    if (req.user || !req.session.userId) {
+        return next();
+    }
+
+    try {
+        const sessionUser = await User.findById(req.session.userId);
+        if (sessionUser) {
+            req.user = sessionUser;
+        } else {
+            delete req.session.userId;
+        }
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
+
 
 app.use((req, res, next) => {
     const successMessages = req.flash("success");
