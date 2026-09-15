@@ -1,14 +1,28 @@
 const Listing = require("./models/listing.js");
 const Review = require("./models/review.js");
+const User = require("./models/user.js");
 const { listingSchema, reviewSchema } = require("./schema.js");
 const ExpressError = require("./utils/ExpressError.js");
 
-module.exports.isLoggedIn = (req, res, next) => {
-    if(!req.isAuthenticated())
-    {
+module.exports.isLoggedIn = async (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        const userId = req.session?.userId || req.signedCookies?.authUserId;
+        if (userId) {
+            try {
+                const user = await User.findById(userId);
+                if (user) {
+                    req.user = user;
+                    req.session.userId = user._id.toString();
+                    return next();
+                }
+            } catch (err) {
+                return next(err);
+            }
+        }
+
         req.session.redirectUrl = req.originalUrl;
-        req.flash("error","You must be logged in to create listing");
-       return res.redirect("/login");
+        req.flash("error", "You must be logged in to continue");
+        return res.redirect("/login");
     }
     next();
 }

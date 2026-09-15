@@ -50,6 +50,9 @@ module.exports.signup = async (req, res, next) => {
 };
 
 module.exports.renderLoginForm = (req, res) => {
+    if (req.query.redirect?.startsWith("/")) {
+        req.session.redirectUrl = req.query.redirect;
+    }
     res.render("users/login.ejs");
 };
 
