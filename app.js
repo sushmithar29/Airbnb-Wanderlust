@@ -102,8 +102,11 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
-    res.locals.currUser = req.user || null;
-    res.locals.isLoggedIn = req.isAuthenticated();
+    // Keep the navigation state available when the session is present but
+    // Passport has not restored req.user for this request.
+    const sessionUserId = req.session.userId;
+    res.locals.currUser = req.user || (sessionUserId ? { _id: sessionUserId } : null);
+    res.locals.isLoggedIn = Boolean(req.user || sessionUserId);
     next();
 });
 

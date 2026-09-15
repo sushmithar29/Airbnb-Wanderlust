@@ -15,6 +15,7 @@ module.exports.signup = async (req, res, next) => {
                 return next(err);
             }
 
+            req.session.userId = registeredUser._id.toString();
             req.flash("success", "Welcome to Wanderlust");
             req.session.save((saveErr) => {
                 if (saveErr) {
@@ -34,6 +35,7 @@ module.exports.renderLoginForm = (req, res) => {
 };
 
 module.exports.login = (req, res, next) => {
+    req.session.userId = req.user._id.toString();
     req.flash("success", "Welcome back to Wanderlust!!");
     req.session.save((err) => {
         if (err) {
@@ -49,6 +51,7 @@ module.exports.logout = (req, res, next) => {
             return next(err);
         }
 
+        delete req.session.userId;
         req.flash("success", "You are logged out now!");
         res.redirect("/listings");
     });
